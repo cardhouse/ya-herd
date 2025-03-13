@@ -1,0 +1,24 @@
+created:
+    - database/factories/HerdFactory.php
+    - database/factories/GoatFactory.php
+    - database/factories/MedicalRecordFactory.php
+    - database/factories/BreedingRecordFactory.php
+    - database/factories/FeedingScheduleFactory.php
+    - database/migrations/2025_03_11_010814_create_herds_table.php
+    - database/migrations/2025_03_11_010815_create_goats_table.php
+    - database/migrations/2025_03_11_010816_create_medical_records_table.php
+    - database/migrations/2025_03_11_010817_create_breeding_records_table.php
+    - database/migrations/2025_03_11_010818_create_feeding_schedules_table.php
+    - database/migrations/2025_03_11_010819_create_herd_user_table.php
+    - app/Models/Herd.php
+    - app/Models/Goat.php
+    - app/Models/MedicalRecord.php
+    - app/Models/BreedingRecord.php
+    - app/Models/FeedingSchedule.php
+models:
+    User: { name: string, email: string, email_verified_at: 'datetime nullable', password: string, remember_token: 'string nullable' }
+    Herd: { name: string, description: 'text nullable', created_by: 'id foreign:user cascade', relationships: { belongsToMany: User, hasMany: 'Goat, BreedingRecord, FeedingSchedule, MedicalRecord' } }
+    Goat: { herd_id: 'id foreign:herds cascade', name: string, breed: 'string nullable', sex: 'enum:M,F nullable', date_of_birth: 'date nullable', relationships: { belongsTo: Herd, hasMany: 'MedicalRecord, BreedingRecord' } }
+    MedicalRecord: { goat_id: 'id foreign:goats cascade', date: date, type: string, notes: 'text nullable', relationships: { belongsTo: Goat } }
+    BreedingRecord: { herd_id: 'id foreign:herds cascade', female_id: 'id foreign:goats cascade', male_id: 'id foreign:goats cascade', date: date, notes: 'text nullable', relationships: { belongsTo: 'Herd, Goat:female, Goat:male' } }
+    FeedingSchedule: { herd_id: 'id foreign:herds cascade', goat_id: 'id foreign:goats nullable nullOnDelete', scheduled_at: datetime, details: text, relationships: { belongsTo: 'Herd, Goat nullable' } }

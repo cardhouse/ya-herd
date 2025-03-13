@@ -1,0 +1,43 @@
+models:
+  Herd:
+    name: string
+    description: text nullable
+    created_by: id foreign:user cascade
+    relationships:
+      belongsToMany: User
+      hasMany: Goat, BreedingRecord, FeedingSchedule, MedicalRecord
+
+  Goat:
+    herd_id: id foreign:herds cascade
+    name: string
+    breed: string nullable
+    sex: enum:M,F nullable
+    date_of_birth: date nullable
+    relationships:
+      belongsTo: Herd
+      hasMany: MedicalRecord, BreedingRecord
+
+  MedicalRecord:
+    goat_id: id foreign:goats cascade
+    date: date
+    type: string
+    notes: text nullable
+    relationships:
+      belongsTo: Goat
+
+  BreedingRecord:
+    herd_id: id foreign:herds cascade
+    female_id: id foreign:goats cascade
+    male_id: id foreign:goats cascade
+    date: date
+    notes: text nullable
+    relationships:
+      belongsTo: Herd, Goat:female, Goat:male
+
+  FeedingSchedule:
+    herd_id: id foreign:herds cascade
+    goat_id: id foreign:goats nullable nullOnDelete
+    scheduled_at: datetime
+    details: text
+    relationships:
+      belongsTo: Herd, Goat nullable
