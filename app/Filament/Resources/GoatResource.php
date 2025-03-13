@@ -17,6 +17,8 @@ class GoatResource extends Resource
 {
     protected static ?string $model = Goat::class;
 
+    protected static ?string $navigationGroup = 'Goat Management';
+
     protected static ?string $navigationIcon = 'heroicon-o-rectangle-stack';
 
     public static function form(Form $form): Form
@@ -28,6 +30,9 @@ class GoatResource extends Resource
     public static function table(Table $table): Table
     {
         return $table
+            ->modifyQueryUsing(fn(Builder $query) => $query->whereHas('herd', function (Builder $query) {
+                return $query->where('created_by', auth()->user()->id);
+            }))
             ->columns([
                 Tables\Columns\TextColumn::make('herd.name')
                     ->numeric()

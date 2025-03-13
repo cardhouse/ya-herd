@@ -17,6 +17,10 @@ class BreedingRecordResource extends Resource
 {
     protected static ?string $model = BreedingRecord::class;
 
+    protected static ?string $navigationGroup = 'Herd Management';
+
+    protected static ?int $navigationSort = 2;
+
     protected static ?string $navigationIcon = 'heroicon-o-rectangle-stack';
 
     public static function form(Form $form): Form

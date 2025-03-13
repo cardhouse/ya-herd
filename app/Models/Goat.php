@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use Filament\Forms;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
@@ -40,7 +41,9 @@ class Goat extends Model
     {
         return [
             Forms\Components\Select::make('herd_id')
-                ->relationship('herd', 'name')
+                ->relationship('herd', 'name', function (Builder $query) {
+                    return $query->where('created_by', auth()->user()->id);
+                })
                 ->required(),
             Forms\Components\TextInput::make('name')
                 ->required(),

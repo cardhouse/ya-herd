@@ -17,6 +17,10 @@ class FeedingScheduleResource extends Resource
 {
     protected static ?string $model = FeedingSchedule::class;
 
+    protected static ?int $navigationSort = 3;
+
+    protected static ?string $navigationGroup = 'Herd Management';
+
     protected static ?string $navigationIcon = 'heroicon-o-rectangle-stack';
 
     public static function form(Form $form): Form
